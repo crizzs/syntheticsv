@@ -1,0 +1,11 @@
+purchase_id,item_name,selling_price,goods_and_services_tax,cost_price,alcohol_tax
+1,milk,2.35,0.07,0.95,0
+2,beer,3,0.07,,0.25
+3,diapers,18.75,0.07,10.65,0
+4,toothbrushes,4.65,0.07,1.2,0
+5,tissue,3.4,0.07,2.5,0
+6,nestle's oat,8.35,0.07,4.2,0
+7,kit kat,1.87,0.07,0.4,0
+8,apple juice,1.2,0.07,0.8,0
+9,sunkist oranges,3.95,0.07,1.77,0
+10,shirt,12.99,0.07,3.8,0

@@ -21,7 +21,7 @@ run:
 	./$(BINARY_NAME)
 deps:
 	$(GOGET) github.com/stretchr/testify
-	$(GOGET) github.com/shenwei356/csvtk/csvtk
+	$(GOGET) github.com/soniah/evaler
 
 
 # Cross compilation

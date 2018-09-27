@@ -7,7 +7,6 @@ import(
 	"fmt"
 )
 
-
 /************
 Set Global Variables
 ************/
@@ -70,6 +69,7 @@ func SplitLine(eachLine string) []string{
 	allValues := strings.Split(eachLine,delimiter)
 	return allValues
 }
+
 /**************
 Move to next line
 **************/
@@ -81,7 +81,6 @@ func errorMsgGenerator(msgNum int) {
 	fmt.Println(listOfReplies[msgNum])
 	os.Exit(0)
 }
-
 
 /*************
 Safe exit from error(s)

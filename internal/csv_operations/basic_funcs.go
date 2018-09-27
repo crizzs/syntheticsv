@@ -2,12 +2,14 @@ package syntheticsv
 
 import(
 	//"fmt"
-	//"strconv"
+	"strconv"
+	"strings"
+	"github.com/soniah/evaler"
 )
 /*******
 Merge values on a single row with delimiter
 ********/
-func MergeValues(fields []string) string{
+func MergeValues(rowValues []string) string{
 	//Check if the delimiter for MergedValues is identical to csv delimiter
 	if operationDelim == delimiter {
 		operationDelim = ""
@@ -19,9 +21,9 @@ func MergeValues(fields []string) string{
 	i := 0
 	concatStr := ""
 
-	for i < len(fields) {
-		concatStr += RetrieveValue(anotherLineArr,fields[i])
-		if i != (len(fields)-1){
+	for i < len(rowValues) {
+		concatStr += RetrieveStrValue(anotherLineArr,rowValues[i])
+		if i != (len(rowValues)-1){
 			concatStr += operationDelim
 		}
 
@@ -30,11 +32,55 @@ func MergeValues(fields []string) string{
 	
 	return concatStr
 }
+/***********
+Carry out basic arithmetic function
+for single row based on BODMAS rule
+************/
+func BasicCalculation(formula string,rowValues []string) float64{
+	//This check ensures field name replacer works
+	CheckFieldNameValidity()
 
+	for eachField, _ := range fields {
+		fieldFloatVal , fieldValidity := RetrieveFloatValue(rowValues,eachField)
+
+		floatStr := strconv.FormatFloat(fieldFloatVal,'g' ,-1, 64)
+		//Subsitute an empty string to destabilise the formula
+		if fieldValidity == false {
+			floatStr = ""
+		}
+		
+		formula = strings.Replace(formula,eachField,floatStr,-1)
+	}
+	//Eval formula based on bodmas rule
+	result, err := evaler.Eval(formula)
+	if err != nil {
+		return 0.0
+	}
+
+	evalFloatResult := evaler.BigratToFloat(result)
+	
+	return evalFloatResult
+}
+/**********
+Check for Entire Field Name
+existing in another Field Name
+***********/
+func CheckFieldNameValidity(){
+	//Field List is generally small, an O(n^2) comparator function is being implemented
+	for eachField, _ := range fields {
+		for checkAgainstField, _ := range fields {
+			//Using a map ensures the second condition will not happen
+			if strings.Contains(eachField,checkAgainstField) && eachField != checkAgainstField {
+				//Once found, it will give a message and os exit 
+				errorMsgGenerator(2)
+			}
+		}
+	}
+}
 /*******
-Gets Value from String Array
+Gets string Value from String Array
 *******/
-func RetrieveValue(allValues []string, fieldName string) (string){
+func RetrieveStrValue(allValues []string, fieldName string) (string){
 	//Gets field position and return value
 	fieldPos := fields[fieldName]
 
@@ -45,4 +91,22 @@ func RetrieveValue(allValues []string, fieldName string) (string){
 	fieldVal := allValues[fieldPos]
 
 	return fieldVal
+}
+/*******
+Gets "float" Value from String Array
+*******/
+func RetrieveFloatValue(allValues []string, fieldName string) (float64,bool){
+	//Gets field position and return value
+	fieldPos := fields[fieldName]
+
+	if fieldPos == 0 && firstFieldName != fieldName{
+		return 0.0,false
+	}
+
+	floatVal, err := strconv.ParseFloat(allValues[fieldPos],64)
+	if err != nil {
+		return 0.0,false
+	}
+
+	return floatVal,true
 }

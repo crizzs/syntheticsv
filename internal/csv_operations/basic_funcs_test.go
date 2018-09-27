@@ -9,43 +9,55 @@ Test fields merging capability
 ****/
 func TestMergeValues(t *testing.T){
 	//Reset the settings to default
-	SetAllBasicSettings()
+	SetAllBasicSettings(",","./sample_csv/airports.csv","")
 	//(Scenario 1: Different Ops Delim)
-	SetGlobalVars(",","./sample_csv/airports.csv","")
+	SetAllBasicSettings(",","./sample_csv/airports.csv","")
 	mergedInfo := MergeValues([]string{"iata_code","country"})
 	assert.Equal(t,mergedInfo, "AAAFrench Polynesia", "First and Last value should merge.")
 	//(Scenario 2: Different Ops Delim)
-	SetGlobalVars(",","./sample_csv/airports.csv","|")
+	SetAllBasicSettings(",","./sample_csv/airports.csv","|")
 	mergedInfo = MergeValues([]string{"iata_code","country"})
 	assert.Equal(t,mergedInfo, "AAA|French Polynesia", "First and Last value should merge.")
 	//(Scenario 3: Identical Ops Delim and Delimiter)
-	SetGlobalVars(",","./sample_csv/airports.csv",",")
+	SetAllBasicSettings(",","./sample_csv/airports.csv",",")
 	mergedInfo = MergeValues([]string{"iata_code","country"})
 	assert.Equal(t,mergedInfo, "AAAFrench Polynesia", "Comma is identical, and be replaced with empty string.")
-}
-/****
-Test basic arithmetic capability between fields
-****/
-func TestBasicArithmetic(t *testing.T){
-
 }
 
 func TestRetrieveVals(t *testing.T){
 	
 	anotherLineArr := SplitLine(csvFileStore.Text())
 	//Retrieve Value based on field
-	val := RetrieveValue(anotherLineArr,"country")
+	val := RetrieveStrValue(anotherLineArr,"country")
 
 	assert.Equal(t,val, "French Polynesia", "Must match the position of header field.")
 
 	//Test when field name doesn't exist
-	noVal := RetrieveValue(anotherLineArr,"fake_country")
+	noVal := RetrieveStrValue(anotherLineArr,"fake_country")
 	assert.Equal(t,noVal, "", "The return needs to be empty string.")
+}
+/****
+Test basic arithmetic capability between fields
+****/
+func TestBasicArithmetic(t *testing.T){
+	//Loads supermarket data set for arithmetic functions
+	SetAllBasicSettings(",","./sample_csv/supermarket.csv","")
+	secondLineArr := SplitLine(csvFileStore.Text())
+
+	val := BasicCalculation("selling_price*(1-(goods_and_services_tax+alcohol_tax))-cost_price",secondLineArr)
+	//Test for bodmas rule
+	assert.Equal(t, val, 1.2355, "Profit must match with result")
+	//Test data which contains empty string
+	MoveToNextLine()
+	thirdLineArr := SplitLine(csvFileStore.Text())
+
+	invalidVal := BasicCalculation("selling_price*(1-(goods_and_services_tax+alcohol_tax))-cost_price",thirdLineArr)
+	assert.Equal(t, invalidVal, 0.0, "An invalid equation will yield default 0 as result.")
 }
 
 //Function to evoke all basic settings for Unit Test purpose
-func SetAllBasicSettings() {
-	SetGlobalVars(",","./sample_csv/airports.csv","")
+func SetAllBasicSettings(delim string,dir string,opsDelim string) {
+	SetGlobalVars(delim,dir,opsDelim)
 	csvFile := ReadFile(directory)
 	csvFileStore = csvFile
 	MoveToNextLine()
