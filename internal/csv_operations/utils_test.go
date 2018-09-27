@@ -7,7 +7,7 @@ import(
 
 //Setting Global Variables (Test)
 func TestSetGlobalVars(t *testing.T){
-	SetGlobalVars(",","./sample_csv/airports.csv")
+	SetGlobalVars(",","./sample_csv/airports.csv","|")
 	assert.Equal(t,delimiter, ",", "This sets the delimiter of csv file.")
 	assert.Equal(t,directory, "./sample_csv/airports.csv", "This sets the location of csv file.")
 }

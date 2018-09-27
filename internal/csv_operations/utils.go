@@ -4,13 +4,33 @@ import(
 	"os"
 	"bufio"
 	"strings"
+	"fmt"
 )
+
+
 /************
 Set Global Variables
 ************/
-func SetGlobalVars(delim string,dir string){
+func SetGlobalVars(delim string,dir string,opsDelim string){
+	//Default settings
+	if delim == "" {
+		delim = ","
+	}
+	if opsDelim == "" {
+		operationDelim = "|"
+	}
+	//If identical, operation delimiter will be empty string
+	if delim == opsDelim {
+		operationDelim = ""
+	}
+	//Throws error when no directory is found
+	if dir == "" {
+		errorMsgGenerator(1)
+	}
+
 	delimiter = delim
 	directory = dir
+	operationDelim = opsDelim
 }
 
 /************
@@ -31,6 +51,8 @@ Store Fields to a map
 func StoreFieldsHeader(firstLine string) map[string]int {
 	allFields := strings.Split(firstLine,delimiter)
 	fields = make(map[string]int)
+	firstFieldName = allFields[0]
+
 	i := 0
 
 	for i < len(allFields){
@@ -54,6 +76,12 @@ Move to next line
 func MoveToNextLine(){
 	csvFileStore.Scan()
 }
+
+func errorMsgGenerator(msgNum int) {
+	fmt.Println(listOfReplies[msgNum])
+	os.Exit(0)
+}
+
 
 /*************
 Safe exit from error(s)
