@@ -9,3 +9,4 @@ purchase_id,item_name,selling_price,goods_and_services_tax,cost_price,alcohol_ta
 8,apple juice,1.2,0.07,0.8,0
 9,sunkist oranges,3.95,0.07,1.77,0
 10,shirt,12.99,0.07,3.8,0
+11,beer,12.99,0.07,3.8,0

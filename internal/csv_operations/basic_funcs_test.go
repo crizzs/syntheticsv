@@ -3,6 +3,7 @@ package syntheticsv
 import(
 	"testing"
 	"github.com/stretchr/testify/assert"
+	"fmt"
 )
 /****
 Test fields merging capability 
@@ -53,6 +54,17 @@ func TestBasicArithmetic(t *testing.T){
 
 	invalidVal := BasicCalculation("selling_price*(1-(goods_and_services_tax+alcohol_tax))-cost_price",thirdLineArr)
 	assert.Equal(t, invalidVal, 0.0, "An invalid equation will yield default 0 as result.")
+}
+/*****
+Test whether row containing particular attribute
+*****/
+func TestContainsAttribute(t *testing.T){
+	thirdLineArr := SplitLine(csvFileStore.Text())
+
+	containInFieldStatus := ContainInField("item_name","beer",thirdLineArr)
+	containInRowStatus := ContainInRow("milk",thirdLineArr)
+	assert.Equal(t, containInFieldStatus, true, "Check whether beer is containing in this field.")
+	assert.Equal(t, containInRowStatus, false, "Check whether milk is containing in this row.")
 }
 
 //Function to evoke all basic settings for Unit Test purpose

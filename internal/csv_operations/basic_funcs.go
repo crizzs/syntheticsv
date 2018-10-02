@@ -1,7 +1,6 @@
 package syntheticsv
 
 import(
-	//"fmt"
 	"strconv"
 	"strings"
 	"github.com/soniah/evaler"
@@ -60,6 +59,30 @@ func BasicCalculation(formula string,rowValues []string) float64{
 	evalFloatResult := evaler.BigratToFloat(result)
 	
 	return evalFloatResult
+}
+/********
+Check whether string is containing in this field
+**********/
+func ContainInField(fieldName string,containVal string,rowValues []string) bool{
+	val := RetrieveStrValue(rowValues,fieldName)
+
+	if strings.Contains(val,containVal) {
+		return true
+	}
+	return false
+}
+/********
+Check whether string is containing in this row
+**********/
+func ContainInRow(containVal string,rowValues []string) bool{
+	for eachField,_ := range fields{
+		status := ContainInField(eachField,containVal,rowValues)
+
+		if status == true {
+			return true
+		}
+	}
+	return false
 }
 /**********
 Check for Entire Field Name

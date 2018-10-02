@@ -43,7 +43,25 @@ func ReadFile(dir string) *bufio.Scanner {
 
     return scanner
 }
-
+/*************
+Open File
+*************/
+func openFile(dir string) *os.File {
+    var file, err = os.OpenFile(dir, os.O_APPEND|os.O_WRONLY, 0644)
+    check(err)
+    return file
+}
+/************
+Write to File
+*************/
+func writeToFile(sqlStr string,file *os.File){
+    if _, err := file.WriteString(sqlStr); err != nil {
+        check(err)
+    }
+    //Synchronise file
+    err := file.Sync()
+    check(err)
+}
 /*************
 Store Fields to a map
 **************/
