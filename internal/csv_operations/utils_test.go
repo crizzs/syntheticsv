@@ -37,3 +37,10 @@ func TestSplitString(t *testing.T){
 	assert.Equal(t,secondLine, []string([]string{"AAA", "Anaa", "Anaa", "French Polynesia"}), "String Array should match")
 }
 
+//Test Split String with specified delimiter (Method Overloading)
+func TestSplitStringWithUniqueDelim(t *testing.T){
+	secondLine := SplitLineWithDelim(csvFileStore.Text(),",")
+	//Check the string array is being created
+	assert.Equal(t,secondLine, []string([]string{"AAA", "Anaa", "Anaa", "French Polynesia"}), "String Array should match")
+}
+

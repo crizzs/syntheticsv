@@ -3,7 +3,7 @@ package syntheticsv
 import(
 	"testing"
 	"github.com/stretchr/testify/assert"
-	"fmt"
+	//"fmt"
 )
 /****
 Test fields merging capability 
@@ -66,7 +66,33 @@ func TestContainsAttribute(t *testing.T){
 	assert.Equal(t, containInFieldStatus, true, "Check whether beer is containing in this field.")
 	assert.Equal(t, containInRowStatus, false, "Check whether milk is containing in this row.")
 }
+/******
+Test the generating of geojson for a single Point based on csv data
+*******/
+func TestCreatePointGeojsonFunc(t *testing.T){
+	thirdLineArr := SplitLine(csvFileStore.Text())
+	//Retrieve Location (Latitude/Longitude) and create geojson
+	location := RetrieveStrValue(thirdLineArr,"location")
+	splitLocation := SplitLineWithDelim(location,"|")
+	//Create geojson for a single point(Based on Latitude and Longitude)
+	pointGeoJson := CreatePointGeoJson(splitLocation[0],splitLocation[1])
+	assert.Equal(t, pointGeoJson, "", "Point Geojson should be generated.")
 
+	//Test different scenarios
+	incorrectLatLngOne := CreatePointGeoJson("-91","180")
+	incorrectLatLngTwo := CreatePointGeoJson("91","180")
+	incorrectLatLngThree := CreatePointGeoJson("90","181")
+	incorrectLatLngFour := CreatePointGeoJson("90","-181")
+	incorrectLatLngFive := CreatePointGeoJson("90","")
+	incorrectLatLngSix := CreatePointGeoJson("abc","-180")
+
+	assert.Equal(t, incorrectLatLngOne, "", "Should catch abnormalities.")
+	assert.Equal(t, incorrectLatLngTwo, "", "Should catch abnormalities.")
+	assert.Equal(t, incorrectLatLngThree, "", "Should catch abnormalities.")
+	assert.Equal(t, incorrectLatLngFour, "", "Should catch abnormalities.")
+	assert.Equal(t, incorrectLatLngFive, "", "Should catch abnormalities.")
+	assert.Equal(t, incorrectLatLngSix, "", "Should catch abnormalities.")
+}
 //Function to evoke all basic settings for Unit Test purpose
 func SetAllBasicSettings(delim string,dir string,opsDelim string) {
 	SetGlobalVars(delim,dir,opsDelim)

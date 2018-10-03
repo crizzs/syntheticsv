@@ -5,6 +5,7 @@ import(
 	"bufio"
 	"strings"
 	"fmt"
+	"strconv"
 )
 
 /************
@@ -24,7 +25,7 @@ func SetGlobalVars(delim string,dir string,opsDelim string){
 	}
 	//Throws error when no directory is found
 	if dir == "" {
-		errorMsgGenerator(1)
+		ErrorMsgGenerator(1)
 	}
 
 	delimiter = delim
@@ -40,7 +41,9 @@ func ReadFile(dir string) *bufio.Scanner {
     check(err)
 
     scanner := bufio.NewScanner(file)
-
+    //Reset to default setting
+    currentLine = 0
+    totalLine = 0
     return scanner
 }
 /*************
@@ -87,19 +90,33 @@ func SplitLine(eachLine string) []string{
 	allValues := strings.Split(eachLine,delimiter)
 	return allValues
 }
-
+/*********
+Split Line With Specific delimiter (Non-Header)
+*********/
+func SplitLineWithDelim(eachLine string,delim string) []string{
+	allValues := strings.Split(eachLine,delim)
+	return allValues
+}
 /**************
 Move to next line
 **************/
 func MoveToNextLine(){
 	csvFileStore.Scan()
+	currentLine++
 }
-
-func errorMsgGenerator(msgNum int) {
-	fmt.Println(listOfReplies[msgNum])
+/*****
+Only Show Error Message
+******/
+func ErrorMsgGeneratorWithoutExit(msgNum int) {
+	fmt.Println(listOfReplies[msgNum] + "(Encountered on Line "+ strconv.Itoa(currentLine) +")")
+}
+/*****
+Exit with Error Message
+******/
+func ErrorMsgGenerator(msgNum int) {
+	fmt.Println(listOfReplies[msgNum] + "(Encountered on Line "+ strconv.Itoa(currentLine) +")")
 	os.Exit(0)
 }
-
 /*************
 Safe exit from error(s)
 *************/

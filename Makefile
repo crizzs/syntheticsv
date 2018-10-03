@@ -22,7 +22,7 @@ run:
 deps:
 	$(GOGET) github.com/stretchr/testify
 	$(GOGET) github.com/soniah/evaler
-
+	$(GOGET) github.com/kpawlik/geojson
 
 # Cross compilation
 build-linux:

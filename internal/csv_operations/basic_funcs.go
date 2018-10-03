@@ -84,6 +84,20 @@ func ContainInRow(containVal string,rowValues []string) bool{
 	}
 	return false
 }
+/*********
+Creates a Point GeoJson
+**********/
+func CreatePointGeoJson(lat string,lon string) string{
+	//Check if Latitude and Longitude are both valid
+	latValid := regExpLatitude.MatchString(lat)
+	lonValid := regExpLongitude.MatchString(lon)
+
+	if latValid == false || lonValid == false {
+		ErrorMsgGeneratorWithoutExit(3)
+	}
+
+ 	return ""
+}
 /**********
 Check for Entire Field Name
 existing in another Field Name
@@ -95,7 +109,7 @@ func CheckFieldNameValidity(){
 			//Using a map ensures the second condition will not happen
 			if strings.Contains(eachField,checkAgainstField) && eachField != checkAgainstField {
 				//Once found, it will give a message and os exit 
-				errorMsgGenerator(2)
+				ErrorMsgGenerator(2)
 			}
 		}
 	}
