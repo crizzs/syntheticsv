@@ -108,13 +108,13 @@ func MoveToNextLine(){
 Only Show Error Message
 ******/
 func ErrorMsgGeneratorWithoutExit(msgNum int) {
-	fmt.Println(listOfReplies[msgNum] + "(Encountered on Line "+ strconv.Itoa(currentLine) +")")
+	fmt.Println(listOfReplies[msgNum] + "(On Line "+ strconv.Itoa(currentLine) +")")
 }
 /*****
 Exit with Error Message
 ******/
 func ErrorMsgGenerator(msgNum int) {
-	fmt.Println(listOfReplies[msgNum] + "(Encountered on Line "+ strconv.Itoa(currentLine) +")")
+	fmt.Println(listOfReplies[msgNum] + "(On Line "+ strconv.Itoa(currentLine) +")")
 	os.Exit(0)
 }
 /*************
@@ -122,6 +122,7 @@ Safe exit from error(s)
 *************/
 func check(e error) {
     if e != nil {
+    	fmt.Println("Error:"+e.Error()+ "(On Line "+ strconv.Itoa(currentLine) +")")
         os.Exit(0)
     }
 }

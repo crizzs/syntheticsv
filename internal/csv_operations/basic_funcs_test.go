@@ -85,6 +85,7 @@ func TestCreatePointGeojsonFunc(t *testing.T){
 	incorrectLatLngFour := CreatePointGeoJson("90","-181")
 	incorrectLatLngFive := CreatePointGeoJson("90","")
 	incorrectLatLngSix := CreatePointGeoJson("abc","-180")
+	correctLatLngOne := CreatePointGeoJson("90","-180")
 
 	assert.Equal(t, incorrectLatLngOne, "", "Should catch abnormalities.")
 	assert.Equal(t, incorrectLatLngTwo, "", "Should catch abnormalities.")
@@ -92,6 +93,8 @@ func TestCreatePointGeojsonFunc(t *testing.T){
 	assert.Equal(t, incorrectLatLngFour, "", "Should catch abnormalities.")
 	assert.Equal(t, incorrectLatLngFive, "", "Should catch abnormalities.")
 	assert.Equal(t, incorrectLatLngSix, "", "Should catch abnormalities.")
+	//Correct outcome
+	assert.Equal(t, correctLatLngOne, "{\"type\":\"Point\",\"coordinates\":[90,-180]}", "Correct LatLng")
 }
 //Function to evoke all basic settings for Unit Test purpose
 func SetAllBasicSettings(delim string,dir string,opsDelim string) {

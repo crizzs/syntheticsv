@@ -4,6 +4,8 @@ import(
 	"strconv"
 	"strings"
 	"github.com/soniah/evaler"
+	gj "github.com/kpawlik/geojson"
+	"fmt"
 )
 /*******
 Merge values on a single row with delimiter
@@ -94,9 +96,27 @@ func CreatePointGeoJson(lat string,lon string) string{
 
 	if latValid == false || lonValid == false {
 		ErrorMsgGeneratorWithoutExit(3)
+		return ""
 	}
 
- 	return ""
+	//Generates Point GeoJSON
+	latFloat, _ := strconv.ParseFloat(strings.TrimSpace(lat),64)
+	lonFloat, _ := strconv.ParseFloat(strings.TrimSpace(lon),64)
+
+	//Change these float64 into Coord
+	x := gj.Coord(latFloat)
+	y := gj.Coord(lonFloat)
+	coord := gj.Coordinate{x,y}
+
+	p := gj.NewPoint(coord)
+
+	if gjstr, err := gj.Marshal(p); err != nil {
+        panic(err)
+    } else {
+        return gjstr
+    }
+
+ 	
 }
 /**********
 Check for Entire Field Name
